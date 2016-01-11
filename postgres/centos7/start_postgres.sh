@@ -3,7 +3,7 @@
 DB_NAME=${POSTGRES_DB:-}
 DB_USER=${POSTGRES_USER:-}
 DB_PASS=${POSTGRES_PASSWORD:-}
-PG_CONFDIR="/var/lib/pgsql/data"
+PG_CONFDIR="/var/lib/pgsql/9.4/data"
 
 __create_user() {
   #Grant rights
@@ -23,7 +23,7 @@ if [ -n "${DB_USER}" ]; then
     echo "CREATE ROLE ${DB_USER} with CREATEROLE login superuser PASSWORD '${DB_PASS}';" |
       sudo -u postgres -H postgres --single \
        -c config_file=${PG_CONFDIR}/postgresql.conf -D ${PG_CONFDIR}
-  
+
 fi
 
 if [ -n "${DB_NAME}" ]; then
@@ -42,11 +42,5 @@ fi
 }
 
 
-__run_supervisor() {
-supervisord -n
-}
-
 # Call all functions
 __create_user
-__run_supervisor
-
